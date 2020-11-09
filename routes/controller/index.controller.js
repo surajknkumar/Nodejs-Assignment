@@ -8,12 +8,10 @@
 var express = require('express');
 var routes = express.Router();
 var service = require('../service/service');
-const DIR = 'src/ui-config/specification';
-
+const DIR = require('dotenv').config();
 //Post get-meta-data with payload module_name and screen_name
 routes.post('/get-meta-data', (req, res) => {
-  console.log(req.body);
-  const url = `${DIR}/${req.body.module_name}/${req.body.screen_name}.json`;
+  const url = `${DIR.parsed.FOLDER_PATH}/${req.body.module_name}/${req.body.screen_name}.json`;
   service
     .getMetaData(url)
     .then(function (data) {
@@ -30,7 +28,10 @@ routes.post('/get-meta-data', (req, res) => {
 
 //get-meta-data
 routes.get('/get-meta-data/*', (req, res) => {
-  const url = `${DIR}/${req.originalUrl.replace('/get-meta-data/', '')}.json`;
+  const url = `${DIR.parsed.FOLDER_PATH}/${req.originalUrl.replace(
+    '/get-meta-data/',
+    ''
+  )}.json`;
   service
     .getMetaData(url)
     .then((data) => {
